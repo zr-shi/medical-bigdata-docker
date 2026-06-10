@@ -32,7 +32,39 @@
 3. 安装完成后启动 Docker Desktop。
 4. 等待左下角显示 Docker Engine 正在运行。
 
-### 第 2 步：下载本项目
+### 第 2 步：中国大陆网络先配置镜像加速（拉取成功的关键）
+
+如果直接拉取 Docker Hub，可能出现以下错误：
+
+```text
+Image ... Interrupted
+failed to copy: httpReadSeeker: failed open
+production.cloudflare.docker.com ... EOF
+```
+
+这通常不是项目损坏，而是 Docker Hub 或 CloudFront 下载链路在当前网络中断。建议在首次启动前配置镜像加速：
+
+1. 打开 Docker Desktop。
+2. 进入 `Settings` → `Docker Engine`。
+3. 如果编辑框里只有 `{}`，可以替换为下面的内容：
+
+```json
+{
+  "registry-mirrors": [
+    "https://docker.1ms.run",
+    "https://docker.m.daocloud.io",
+    "https://docker.1panel.live"
+  ]
+}
+```
+
+如果原来的 JSON 中还有其他配置，不要全部删除，只需在最外层加入 `registry-mirrors` 字段，并注意前一个字段末尾需要有英文逗号。
+
+4. 点击 `Apply & Restart`，等待 Docker Desktop 重启完成。
+
+镜像站属于第三方公共服务，可用性可能随时间变化，仅建议用于拉取公开镜像。不要随意使用来源不明的镜像站。Docker 官方配置说明：<https://docs.docker.com/docker-hub/image-library/mirror/>。
+
+### 第 3 步：下载本项目
 
 不会使用 Git：
 
@@ -48,7 +80,7 @@ git clone https://github.com/zr-shi/medical-bigdata-docker.git
 cd medical-bigdata-docker
 ```
 
-### 第 3 步：启动系统
+### 第 4 步：启动系统
 
 在项目文件夹空白处按住 `Shift` 并点击鼠标右键，选择“在终端中打开”，执行：
 
@@ -69,7 +101,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
 密码：123456
 ```
 
-### 第 4 步：启动完整大数据环境
+### 第 5 步：启动完整大数据环境
 
 电脑建议至少有 10 GB 可用内存和 20 GB 可用磁盘，然后执行：
 
@@ -159,6 +191,14 @@ DOCKER_REGISTRY=docker.io
 ```
 
 然后重新运行启动脚本。
+
+如果错误信息包含 `production.cloudflare.docker.com`、`EOF` 或多个镜像显示 `Interrupted`，请优先按照上面的“第 2 步”配置 Docker Desktop 的 `registry-mirrors`，点击 `Apply & Restart` 后重新执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
+```
+
+Docker 会继续下载尚未完成的镜像层，不需要删除项目或重新解压。
 
 ### 是否需要作者的电脑或虚拟机一直开机
 

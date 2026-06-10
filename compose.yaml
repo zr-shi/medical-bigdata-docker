@@ -6,13 +6,13 @@ x-restart: &restart
 x-hadoop: &hadoop
   <<: *restart
   profiles: [bigdata]
-  image: ${HADOOP_IMAGE:-shizr/medical-hadoop:3.4.1}
+  image: ${HADOOP_IMAGE:-shizr/medicine-bigdata:hadoop-3.4.1}
   networks: [platform]
 
 services:
   mysql:
     <<: *restart
-    image: ${MYSQL_IMAGE:-shizr/medical-his-mysql:1.0.0}
+    image: ${MYSQL_IMAGE:-shizr/medicine-bigdata:mysql-1.0.0}
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
       MYSQL_DATABASE: his_system
@@ -52,7 +52,7 @@ services:
 
   backend:
     <<: *restart
-    image: ${BACKEND_IMAGE:-shizr/medical-his-backend:1.0.0}
+    image: ${BACKEND_IMAGE:-shizr/medicine-bigdata:backend-1.0.0}
     environment:
       SERVER_MODE: release
       MYSQL_HOST: mysql
@@ -83,7 +83,7 @@ services:
 
   frontend:
     <<: *restart
-    image: ${FRONTEND_IMAGE:-shizr/medical-his-frontend:1.0.0}
+    image: ${FRONTEND_IMAGE:-shizr/medicine-bigdata:frontend-1.0.0}
     depends_on:
       backend:
         condition: service_healthy
@@ -310,4 +310,3 @@ volumes:
   hadoop2-yarn:
   hadoop3-datanode:
   hadoop3-yarn:
-

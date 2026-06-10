@@ -174,7 +174,11 @@ DOCKER_REGISTRY=docker.io
 
 ## Docker Hub 镜像
 
-- `shizr/medical-his-mysql:1.0.0`
-- `shizr/medical-his-backend:1.0.0`
-- `shizr/medical-his-frontend:1.0.0`
-- `shizr/medical-hadoop:3.4.1`
+- `shizr/medicine-bigdata:mysql-1.0.0`
+- `shizr/medicine-bigdata:backend-1.0.0`
+- `shizr/medicine-bigdata:frontend-1.0.0`
+- `shizr/medicine-bigdata:hadoop-3.4.1`
+
+Docker Hub 没有二级文件夹功能，因此本项目使用一个仓库、多个标签来区分组件。以后其他项目可以继续创建独立仓库，例如 `shizr/另一个项目`，不会和本项目混在一起。
+
+个人免费账户适合保存公开镜像，通常不需要为本课程项目付费。Docker Hub 会对镜像拉取频率、私有仓库和团队协作功能设置套餐限制，具体规则可能调整，请以 Docker 官方定价页面为准：<https://www.docker.com/pricing/>。

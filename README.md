@@ -44,7 +44,7 @@
 会使用 Git：
 
 ```powershell
-git clone https://github.com/shizr/medical-bigdata-docker.git
+git clone https://github.com/zr-shi/medical-bigdata-docker.git
 cd medical-bigdata-docker
 ```
 
@@ -92,7 +92,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1 -Full
 ## Linux / 云服务器
 
 ```bash
-git clone https://github.com/shizr/medical-bigdata-docker.git
+git clone https://github.com/zr-shi/medical-bigdata-docker.git
 cd medical-bigdata-docker
 chmod +x scripts/*.sh
 ./scripts/start-linux.sh
@@ -178,4 +178,3 @@ DOCKER_REGISTRY=docker.io
 - `shizr/medical-his-backend:1.0.0`
 - `shizr/medical-his-frontend:1.0.0`
 - `shizr/medical-hadoop:3.4.1`
-

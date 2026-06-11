@@ -29,7 +29,17 @@ if ($Full) {
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 & docker compose @profile up -d --no-build
-if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+if ($LASTEXITCODE -ne 0) {
+    Write-Host ""
+    Write-Host "Startup failed. Recent backend and MySQL logs:"
+    & docker compose logs --no-color --tail=80 backend mysql
+    Write-Host ""
+    Write-Host "If MySQL is healthy but the backend is unhealthy, an old Docker volume may use a different password."
+    Write-Host "For an old local demo volume, set MYSQL_ROOT_PASSWORD=root123 in .env and run this script again."
+    Write-Host "To discard all old demo data and start clean:"
+    Write-Host "docker compose --profile bigdata down --volumes"
+    exit $LASTEXITCODE
+}
 
 Write-Host ""
 Write-Host "Started. Open: http://localhost"

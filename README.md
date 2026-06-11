@@ -200,6 +200,39 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
 
 Docker 会继续下载尚未完成的镜像层，不需要删除项目或重新解压。
 
+### MySQL 正常，但 backend 显示 `unhealthy`
+
+如果输出类似：
+
+```text
+Container medical-bigdata-mysql-1    Healthy
+Container medical-bigdata-backend-1  Error
+dependency failed to start: backend is unhealthy
+```
+
+最常见原因是电脑里存在以前运行本项目留下的 MySQL 数据卷。MySQL 初始化密码只在数据卷第一次创建时生效；后来修改 `.env` 不会自动修改旧数据库的 root 密码。
+
+如果以前使用的是本项目默认密码，请打开 `.env`，确认：
+
+```dotenv
+MYSQL_ROOT_PASSWORD=root123
+```
+
+保存后重新运行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
+```
+
+如果旧数据不需要保留，可以删除旧演示数据并全新初始化：
+
+```powershell
+docker compose --profile bigdata down --volumes
+powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
+```
+
+`down --volumes` 会永久删除本项目已有的 MySQL、Redis、Hadoop 等数据，只能在确认旧数据不需要时执行。
+
 ### 是否需要作者的电脑或虚拟机一直开机
 
 不需要。镜像下载后，所有服务都运行在使用者自己的 Docker 中。只有希望提供一个固定公网网站时，部署该网站的云服务器需要保持开机。

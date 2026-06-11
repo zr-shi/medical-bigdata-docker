@@ -4,6 +4,19 @@
 
 > 数据说明：公开数据库只包含脱敏演示数据，不包含原始患者姓名、身份证、电话、地址或本地数据库备份。
 
+## 版本 1.1.0：就诊卡业务修复
+
+- 患者管理的“就诊卡”窗口会显示患者姓名、患者编号和正确的空状态。
+- 补齐脱敏演示患者的就诊卡数据，并修复旧演示数据中的乱码字段。
+- 办卡、充值、挂失、补卡完成后会自动刷新当前患者的卡片列表。
+- 启动脚本会自动执行安全、可重复的数据迁移，已有数据卷不需要删除。
+
+已经下载过旧版本的用户，在项目目录重新运行启动命令即可保留数据并升级：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
+```
+
 ## 能运行什么
 
 默认模式包含：
@@ -247,9 +260,9 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
 
 ## Docker Hub 镜像
 
-- `shizr/medicine-bigdata:mysql-1.0.0`
+- `shizr/medicine-bigdata:mysql-1.1.0`
 - `shizr/medicine-bigdata:backend-1.0.0`
-- `shizr/medicine-bigdata:frontend-1.0.0`
+- `shizr/medicine-bigdata:frontend-1.1.0`
 - `shizr/medicine-bigdata:hadoop-3.4.1`
 
 Docker Hub 没有二级文件夹功能，因此本项目使用一个仓库、多个标签来区分组件。以后其他项目可以继续创建独立仓库，例如 `shizr/另一个项目`，不会和本项目混在一起。

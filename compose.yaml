@@ -12,7 +12,7 @@ x-hadoop: &hadoop
 services:
   mysql:
     <<: *restart
-    image: ${MYSQL_IMAGE:-shizr/medicine-bigdata:mysql-1.0.0}
+    image: ${MYSQL_IMAGE:-shizr/medicine-bigdata:mysql-1.1.0}
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
       MYSQL_DATABASE: his_system
@@ -27,6 +27,7 @@ services:
       - "127.0.0.1:${MYSQL_PORT:-3307}:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./migrations:/migrations:ro
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 10s
@@ -83,7 +84,7 @@ services:
 
   frontend:
     <<: *restart
-    image: ${FRONTEND_IMAGE:-shizr/medicine-bigdata:frontend-1.0.0}
+    image: ${FRONTEND_IMAGE:-shizr/medicine-bigdata:frontend-1.1.0}
     depends_on:
       backend:
         condition: service_healthy

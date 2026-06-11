@@ -20,6 +20,24 @@ if (-not (Test-Path ".env")) {
     Write-Host "Created .env. Change its passwords before an Internet deployment."
 }
 
+$envPath = (Resolve-Path ".env").Path
+$envContent = [System.IO.File]::ReadAllText($envPath)
+$updatedEnvContent = $envContent.Replace(
+    "shizr/medicine-bigdata:mysql-1.0.0",
+    "shizr/medicine-bigdata:mysql-1.1.0"
+).Replace(
+    "shizr/medicine-bigdata:frontend-1.0.0",
+    "shizr/medicine-bigdata:frontend-1.1.0"
+)
+if ($updatedEnvContent -ne $envContent) {
+    [System.IO.File]::WriteAllText(
+        $envPath,
+        $updatedEnvContent,
+        [System.Text.UTF8Encoding]::new($false)
+    )
+    Write-Host "Updated public application images to version 1.1.0."
+}
+
 $profile = @()
 if ($Full) {
     $profile = @("--profile", "bigdata")
@@ -38,6 +56,14 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "For an old local demo volume, set MYSQL_ROOT_PASSWORD=root123 in .env and run this script again."
     Write-Host "To discard all old demo data and start clean:"
     Write-Host "docker compose --profile bigdata down --volumes"
+    exit $LASTEXITCODE
+}
+
+Write-Host "Applying safe database migrations..."
+& docker compose exec -T mysql sh -c 'mysql --default-character-set=utf8mb4 -uroot -p"$MYSQL_ROOT_PASSWORD" his_system < /migrations/001_ensure_patient_cards.sql'
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Database migration failed. Recent MySQL logs:"
+    & docker compose logs --no-color --tail=80 mysql
     exit $LASTEXITCODE
 }
 

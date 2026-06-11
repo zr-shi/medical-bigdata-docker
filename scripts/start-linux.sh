@@ -13,6 +13,15 @@ if [ ! -f .env ]; then
   echo "Created .env. Change its passwords before an Internet deployment."
 fi
 
+if grep -q 'shizr/medicine-bigdata:\(mysql\|frontend\)-1\.0\.0' .env; then
+  sed -i.bak \
+    -e 's#shizr/medicine-bigdata:mysql-1\.0\.0#shizr/medicine-bigdata:mysql-1.1.0#g' \
+    -e 's#shizr/medicine-bigdata:frontend-1\.0\.0#shizr/medicine-bigdata:frontend-1.1.0#g' \
+    .env
+  rm -f .env.bak
+  echo "Updated public application images to version 1.1.0."
+fi
+
 if [ "${1:-}" = "--full" ]; then
   docker compose --profile bigdata pull
   docker compose --profile bigdata up -d --no-build
@@ -20,6 +29,9 @@ else
   docker compose pull
   docker compose up -d --no-build
 fi
+
+echo "Applying safe database migrations..."
+docker compose exec -T mysql sh -c 'mysql --default-character-set=utf8mb4 -uroot -p"$MYSQL_ROOT_PASSWORD" his_system < /migrations/001_ensure_patient_cards.sql'
 
 echo ""
 echo "Started. Open: http://localhost"

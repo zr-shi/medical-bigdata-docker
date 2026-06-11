@@ -4,6 +4,14 @@
 
 > 数据说明：公开数据库只包含脱敏演示数据，不包含原始患者姓名、身份证、电话、地址或本地数据库备份。
 
+## 版本 1.4.0：质量分析月份与模拟数据
+
+- 诊疗质量分析首次打开时，自动展示距离当前年月最近的有数据月份。
+- 当前演示库最近的数据为 `2025-12`，不会再默认打开无数据的当前月份。
+- 页面新增“生成模拟数据”，可以选择月份生成脱敏的科室质量指标。
+- 模拟数据以时间上最近一期数据为模板做小幅波动，并明确标注只用于功能演示。
+- 已有数据的月份禁止重复生成，避免覆盖或产生重复记录。
+
 ## 版本 1.2.0：住院与收费业务修复
 
 - 修复住院管理“更新费用”和“办理出院”返回 HTTP 405。
@@ -275,8 +283,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
 ## Docker Hub 镜像
 
 - `shizr/medicine-bigdata:mysql-1.1.0`
-- `shizr/medicine-bigdata:backend-1.2.0`
-- `shizr/medicine-bigdata:frontend-1.2.0`
+- `shizr/medicine-bigdata:backend-1.4.0`
+- `shizr/medicine-bigdata:frontend-1.4.0`
 - `shizr/medicine-bigdata:hadoop-3.4.1`
 
 Docker Hub 没有二级文件夹功能，因此本项目使用一个仓库、多个标签来区分组件。以后其他项目可以继续创建独立仓库，例如 `shizr/另一个项目`，不会和本项目混在一起。

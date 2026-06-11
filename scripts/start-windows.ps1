@@ -27,7 +27,13 @@ $updatedEnvContent = $envContent.Replace(
     "shizr/medicine-bigdata:mysql-1.1.0"
 ).Replace(
     "shizr/medicine-bigdata:frontend-1.0.0",
-    "shizr/medicine-bigdata:frontend-1.1.0"
+    "shizr/medicine-bigdata:frontend-1.2.0"
+).Replace(
+    "shizr/medicine-bigdata:frontend-1.1.0",
+    "shizr/medicine-bigdata:frontend-1.2.0"
+).Replace(
+    "shizr/medicine-bigdata:backend-1.0.0",
+    "shizr/medicine-bigdata:backend-1.2.0"
 )
 if ($updatedEnvContent -ne $envContent) {
     [System.IO.File]::WriteAllText(
@@ -35,7 +41,7 @@ if ($updatedEnvContent -ne $envContent) {
         $updatedEnvContent,
         [System.Text.UTF8Encoding]::new($false)
     )
-    Write-Host "Updated public application images to version 1.1.0."
+    Write-Host "Updated public application images to version 1.2.0."
 }
 
 $profile = @()

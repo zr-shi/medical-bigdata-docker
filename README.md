@@ -4,6 +4,20 @@
 
 > 数据说明：公开数据库只包含脱敏演示数据，不包含原始患者姓名、身份证、电话、地址或本地数据库备份。
 
+## 版本 1.2.0：住院与收费业务修复
+
+- 修复住院管理“更新费用”和“办理出院”返回 HTTP 405。
+- 修复收费管理“收费”“退费”和“打印明细”返回 HTTP 405。
+- 单笔收费现在会按实收金额累计，未结清时显示“部分缴费”，结清后显示“已缴费”。
+- 退费按整单退费处理，避免部分金额退费却错误清空整张账单。
+- 已出院患者不能再修改住院费用，住院费用可以明确更新为 0。
+
+旧用户无需删除数据，重新运行启动命令即可升级：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
+```
+
 ## 版本 1.1.0：就诊卡业务修复
 
 - 患者管理的“就诊卡”窗口会显示患者姓名、患者编号和正确的空状态。
@@ -261,8 +275,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
 ## Docker Hub 镜像
 
 - `shizr/medicine-bigdata:mysql-1.1.0`
-- `shizr/medicine-bigdata:backend-1.0.0`
-- `shizr/medicine-bigdata:frontend-1.1.0`
+- `shizr/medicine-bigdata:backend-1.2.0`
+- `shizr/medicine-bigdata:frontend-1.2.0`
 - `shizr/medicine-bigdata:hadoop-3.4.1`
 
 Docker Hub 没有二级文件夹功能，因此本项目使用一个仓库、多个标签来区分组件。以后其他项目可以继续创建独立仓库，例如 `shizr/另一个项目`，不会和本项目混在一起。

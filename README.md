@@ -4,6 +4,20 @@
 
 > 数据说明：公开数据库只包含脱敏演示数据，不包含原始患者姓名、身份证、电话、地址或本地数据库备份。
 
+## 版本 1.5.0：真实角色权限管理
+
+- 权限管理页面改为读取数据库中的角色和权限，不再使用前端模拟数据。
+- 支持新增、编辑角色，并按角色勾选业务权限；保存后立即生效，无需重启容器。
+- 后端增加动态接口鉴权，不能再通过绕过前端按钮执行未授权操作。
+- 系统管理员保留全部权限，普通角色按照最小权限访问患者、药品、收费、住院、预约和分析业务。
+- 修复历史角色名、权限名的中文乱码，并优化权限分组和选择状态。
+
+旧用户直接重新运行启动脚本即可保留现有数据并升级到 `1.5.0`：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
+```
+
 ## 版本 1.4.0：质量分析月份与模拟数据
 
 - 诊疗质量分析首次打开时，自动展示距离当前年月最近的有数据月份。
@@ -283,8 +297,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
 ## Docker Hub 镜像
 
 - `shizr/medicine-bigdata:mysql-1.1.0`
-- `shizr/medicine-bigdata:backend-1.4.0`
-- `shizr/medicine-bigdata:frontend-1.4.0`
+- `shizr/medicine-bigdata:backend-1.5.0`
+- `shizr/medicine-bigdata:frontend-1.5.0`
 - `shizr/medicine-bigdata:hadoop-3.4.1`
 
 Docker Hub 没有二级文件夹功能，因此本项目使用一个仓库、多个标签来区分组件。以后其他项目可以继续创建独立仓库，例如 `shizr/另一个项目`，不会和本项目混在一起。

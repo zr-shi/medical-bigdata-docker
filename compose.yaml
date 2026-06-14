@@ -53,7 +53,7 @@ services:
 
   backend:
     <<: *restart
-    image: ${BACKEND_IMAGE:-shizr/medicine-bigdata:backend-1.4.0}
+    image: ${BACKEND_IMAGE:-shizr/medicine-bigdata:backend-1.5.0}
     environment:
       SERVER_MODE: release
       MYSQL_HOST: mysql
@@ -84,7 +84,7 @@ services:
 
   frontend:
     <<: *restart
-    image: ${FRONTEND_IMAGE:-shizr/medicine-bigdata:frontend-1.4.0}
+    image: ${FRONTEND_IMAGE:-shizr/medicine-bigdata:frontend-1.5.0}
     depends_on:
       backend:
         condition: service_healthy

@@ -1,5 +1,6 @@
 param(
-    [switch]$Full
+    [switch]$Full,
+    [switch]$LocalAI
 )
 
 $ErrorActionPreference = "Stop"
@@ -64,10 +65,13 @@ if ($updatedEnvContent -ne $envContent) {
 
 $profile = @()
 if ($Full) {
-    $profile = @("--profile", "bigdata")
+    $profile += @("--profile", "bigdata")
+}
+if ($LocalAI) {
+    $profile += @("--profile", "local-ai")
 }
 
-& docker compose @profile pull
+& docker compose @profile pull --ignore-buildable
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 & docker compose @profile up -d --no-build
@@ -99,4 +103,7 @@ if ($Full) {
     Write-Host "HDFS: http://localhost:9870"
     Write-Host "YARN: http://localhost:8088"
     Write-Host "Flink: http://localhost:8081"
+}
+if ($LocalAI) {
+    Write-Host "OpenMed local AI is enabled. The first model request downloads model files."
 }

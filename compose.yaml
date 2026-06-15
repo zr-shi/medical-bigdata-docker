@@ -53,7 +53,7 @@ services:
 
   backend:
     <<: *restart
-    image: ${BACKEND_IMAGE:-shizr/medicine-bigdata:backend-1.5.0}
+    image: ${BACKEND_IMAGE:-shizr/medicine-bigdata:backend-1.6.0}
     environment:
       SERVER_MODE: release
       MYSQL_HOST: mysql
@@ -64,6 +64,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-change-this-secret-before-production}
+      JWT_EXPIRE_HOURS: ${JWT_EXPIRE_HOURS:-24}
       KAFKA_BROKERS: kafka:29092
       MINIO_ENDPOINT: minio:9000
       ANALYTICS_FLINK_JOBMANAGER: flink-jobmanager:8081
@@ -72,6 +73,8 @@ services:
       ANALYTICS_CLICKHOUSE_DATABASE: his_analytics
       ANALYTICS_CLICKHOUSE_USERNAME: default
       ANALYTICS_CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-clickhouse123}
+      OPENMED_URL: ${OPENMED_URL:-http://openmed:8080}
+      MEDICAL_NLP_LITE_URL: ${MEDICAL_NLP_LITE_URL:-http://medical-nlp-lite:8090}
       TZ: Asia/Shanghai
     depends_on:
       mysql:
@@ -82,9 +85,39 @@ services:
       - "127.0.0.1:${API_PORT:-8080}:8080"
     networks: [platform]
 
+  openmed:
+    <<: *restart
+    profiles: [local-ai]
+    build:
+      context: ./openmed
+    image: ${OPENMED_IMAGE:-shizr/medicine-bigdata:openmed-1.6.0}
+    environment:
+      OPENMED_PROFILE: prod
+      OPENMED_SERVICE_KEEP_ALIVE: ${OPENMED_KEEP_ALIVE:-10m}
+      OPENMED_SERVICE_MAX_TEXT_LENGTH: ${OPENMED_MAX_TEXT_LENGTH:-50000}
+      OPENMED_CACHE_DIR: /models/openmed
+      HF_HOME: /models/huggingface
+    volumes:
+      - openmed-models:/models
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks: [platform]
+
+  medical-nlp-lite:
+    <<: *restart
+    profiles: [local-ai]
+    build:
+      context: ./medical-nlp-lite
+    image: ${MEDICAL_NLP_LITE_IMAGE:-shizr/medicine-bigdata:nlp-lite-1.6.0}
+    networks: [platform]
+
   frontend:
     <<: *restart
-    image: ${FRONTEND_IMAGE:-shizr/medicine-bigdata:frontend-1.5.0}
+    image: ${FRONTEND_IMAGE:-shizr/medicine-bigdata:frontend-1.6.0}
     depends_on:
       backend:
         condition: service_healthy
@@ -311,3 +344,4 @@ volumes:
   hadoop2-yarn:
   hadoop3-datanode:
   hadoop3-yarn:
+  openmed-models:

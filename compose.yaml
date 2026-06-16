@@ -117,7 +117,7 @@ services:
 
   frontend:
     <<: *restart
-    image: ${FRONTEND_IMAGE:-shizr/medicine-bigdata:frontend-1.6.0}
+    image: ${FRONTEND_IMAGE:-shizr/medicine-bigdata:frontend-1.6.1}
     depends_on:
       backend:
         condition: service_healthy

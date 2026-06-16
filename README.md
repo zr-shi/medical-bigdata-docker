@@ -317,8 +317,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-windows.ps1
 ## Docker Hub 镜像
 
 - `shizr/medicine-bigdata:mysql-1.1.0`
-- `shizr/medicine-bigdata:backend-1.5.0`
-- `shizr/medicine-bigdata:frontend-1.5.0`
+- `shizr/medicine-bigdata:backend-1.6.0`
+- `shizr/medicine-bigdata:frontend-1.6.1`
 - `shizr/medicine-bigdata:hadoop-3.4.1`
 
 Docker Hub 没有二级文件夹功能，因此本项目使用一个仓库、多个标签来区分组件。以后其他项目可以继续创建独立仓库，例如 `shizr/另一个项目`，不会和本项目混在一起。

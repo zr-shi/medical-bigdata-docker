@@ -13,14 +13,15 @@ if [ ! -f .env ]; then
   echo "Created .env. Change its passwords before an Internet deployment."
 fi
 
-if grep -q 'shizr/medicine-bigdata:\(mysql-1\.0\.0\|backend-1\.[0234]\.0\|frontend-1\.[0-4]\.0\)' .env; then
+if grep -q 'shizr/medicine-bigdata:\(mysql-1\.0\.0\|backend-1\.[02345]\.0\|frontend-1\.[0-5]\.0\|frontend-1\.6\.0\)' .env; then
   sed -i.bak \
     -e 's#shizr/medicine-bigdata:mysql-1\.0\.0#shizr/medicine-bigdata:mysql-1.1.0#g' \
-    -e 's#shizr/medicine-bigdata:backend-1\.[0234]\.0#shizr/medicine-bigdata:backend-1.5.0#g' \
-    -e 's#shizr/medicine-bigdata:frontend-1\.[0-4]\.0#shizr/medicine-bigdata:frontend-1.5.0#g' \
+    -e 's#shizr/medicine-bigdata:backend-1\.[02345]\.0#shizr/medicine-bigdata:backend-1.6.0#g' \
+    -e 's#shizr/medicine-bigdata:frontend-1\.[0-5]\.0#shizr/medicine-bigdata:frontend-1.6.1#g' \
+    -e 's#shizr/medicine-bigdata:frontend-1\.6\.0#shizr/medicine-bigdata:frontend-1.6.1#g' \
     .env
   rm -f .env.bak
-  echo "Updated public application images to version 1.5.0."
+  echo "Updated public application images to the latest safe demo version."
 fi
 
 if [ "${1:-}" = "--full" ]; then
